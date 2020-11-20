@@ -1,0 +1,22 @@
+
+<beans>
+    <bean id="ConnUtils" class="com.lagou.edu.utils.ConnUtils" lazy-init="false">
+    </bean>
+    <bean id="accountDao" class="com.lagou.edu.dao.impl.JdbcAccountDaoImpl">
+        <property name="connectionUtils" ref="ConnUtils" />
+    </bean>
+
+    <bean id="transferService" class="com.lagou.edu.service.impl.TransferServiceImpl">
+        <property name="AccountDao" ref="accountDao"></property>
+    </bean>
+
+    <bean id="TransactionManager" class="com.lagou.edu.utils.TransactionManager">
+        <property name="connectionUtils" ref="ConnUtils"></property>
+    </bean>
+
+    <bean id="ProxyFactory" class="com.lagou.edu.factory.ProxyFactory">
+        <property name="transactionManager" ref="TransactionManager"></property>
+    </bean>
+</beans>
+
+
