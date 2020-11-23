@@ -1,27 +1,33 @@
 package com.lagou.edu.service.impl;
 
+import com.lagou.edu.annon.Service;
 import com.lagou.edu.dao.AccountDao;
-import com.lagou.edu.dao.impl.JdbcAccountDaoImpl;
 import com.lagou.edu.factory.BeanFactory;
 import com.lagou.edu.pojo.Account;
 import com.lagou.edu.service.TransferService;
 
+import java.util.Set;
+
 /**
  * @author 应癫
  */
+@Service(value = "transferService")
 public class TransferServiceImpl implements TransferService {
 
     //private AccountDao accountDao = new JdbcAccountDaoImpl();
 
     //改造1
-    //private static AccountDao accountDao = (AccountDao) BeanFactory.newInstance().getInstance("accountDao");
+    private static AccountDao accountDao = (AccountDao) BeanFactory.newInstance().getInstance("accountDao");
 
     //改造2
-    private AccountDao accountDao;
+    //private AccountDao accountDao;
 
-    public void setAccountDao(AccountDao accountDao) {
-        this.accountDao = accountDao;
-    }
+    /**
+     * public void setAccountDao(AccountDao accountDao) {
+     *         this.accountDao = accountDao;
+     *     }
+     */
+
 
     @Override
     public void transfer(String fromCardNo, String toCardNo, int money) throws Exception {

@@ -4,4 +4,14 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  
+  <filter>
+    <filter-name>iocFilter</filter-name>
+    <filter-class>com.lagou.edu.Interceptor.IocInterceptor</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>iocFilter</filter-name>
+    <url-pattern>/</url-pattern>
+  </filter-mapping>
 </web-app>

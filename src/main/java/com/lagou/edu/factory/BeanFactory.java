@@ -29,7 +29,7 @@ public class BeanFactory {
 
     private static HashMap<String, Object> beans = new HashMap<>();
 
-    static {
+    /*static {
         System.out.println("生产bean");
         //读取xml
         InputStream inputStream = BeanFactory.class.getClassLoader().getResourceAsStream("beans.xml");
@@ -88,7 +88,7 @@ public class BeanFactory {
         } catch (InvocationTargetException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 
     //提供外部根据对象ID获取对应的实例对象的方法
@@ -96,6 +96,12 @@ public class BeanFactory {
         System.out.println(beanName);
         System.out.println(beans);
         return beans.get(beanName);
+    }
+
+
+    public static void addInstance(String beanName, Object bean) {
+        beans.put(beanName, bean);
+        System.out.println("此时容器中的bean实例：" + beans);
     }
 
 }
