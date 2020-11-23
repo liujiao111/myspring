@@ -1,5 +1,6 @@
 package com.lagou.edu.factory;
 
+import com.lagou.edu.annon.Service;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -10,6 +11,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * bean生产工厂
@@ -96,6 +98,17 @@ public class BeanFactory {
         System.out.println(beanName);
         System.out.println(beans);
         return beans.get(beanName);
+    }
+
+    public static Object getInstanceByClassType(Object classType) {
+        final Set<String> keys = beans.keySet();
+        for (String key : keys) {
+            final Object o = beans.get(key);
+            if(o.getClass().equals(classType)) {
+                return o;
+            }
+        }
+        return null;
     }
 
 
