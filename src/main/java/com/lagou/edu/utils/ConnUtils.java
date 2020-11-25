@@ -1,11 +1,14 @@
 package com.lagou.edu.utils;
 
+import com.lagou.edu.annon.Repository;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@Repository(value = "connectionUtils")
 public class ConnUtils {
-    private ThreadLocal<Connection> threadLocal = new ThreadLocal<>(); //存储当前线程的连接
 
+    private ThreadLocal<Connection> threadLocal = new ThreadLocal<>(); //存储当前线程的连接
 
     /**
      * 从当前线程获取连接

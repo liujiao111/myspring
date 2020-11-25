@@ -95,8 +95,6 @@ public class BeanFactory {
 
     //提供外部根据对象ID获取对应的实例对象的方法
     public static Object getInstance(String beanName) {
-        System.out.println(beanName);
-        System.out.println(beans);
         return beans.get(beanName);
     }
 
@@ -111,10 +109,13 @@ public class BeanFactory {
         return null;
     }
 
+    public static HashMap<String, Object> getBeans() {
+        return beans;
+    }
+
 
     public static void addInstance(String beanName, Object bean) {
         beans.put(beanName, bean);
-        System.out.println("此时容器中的bean实例：" + beans);
     }
 
 }

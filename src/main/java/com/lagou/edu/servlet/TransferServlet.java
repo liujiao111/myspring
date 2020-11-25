@@ -1,11 +1,7 @@
 package com.lagou.edu.servlet;
 
-import com.lagou.edu.annon.Autowired;
 import com.lagou.edu.annon.Controller;
-import com.lagou.edu.annon.Service;
 import com.lagou.edu.factory.BeanFactory;
-import com.lagou.edu.factory.ProxyFactory;
-import com.lagou.edu.service.impl.TransferServiceImpl;
 import com.lagou.edu.utils.JsonUtils;
 import com.lagou.edu.pojo.Result;
 import com.lagou.edu.service.TransferService;
@@ -18,26 +14,20 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * @author 应癫
+ * @author liujiao
  */
 @Controller(value = "transferServlet")
 @WebServlet(name="transferServlet",urlPatterns = "/transferServlet")
 public class TransferServlet extends HttpServlet {
 
-    // 1. 实例化service层对象
-    //private TransferService transferService = new TransferServiceImpl();
+    private TransferService transferService = (TransferService) BeanFactory.getInstance("transferService");
 
-    //改造1,将对象实例化到容器中，从容器中获取所需要的对象实例
-    //private static TransferService transferService = (TransferService) BeanFactory.newInstance().getInstance("transferService");
-
-    //改造2.控制事务。
-    //获取代理工厂类
-    /*public static ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getInstance("ProxyFactory");
-    //从代理工厂类中获取代理类对象
-    TransferService transferService = (TransferService) proxyFactory.getProxy(BeanFactory.getInstance("transferService"));*/
-    @Autowired(value = "transferService")
-    private static TransferService transferService; // = (TransferService) BeanFactory.newInstance().getInstance("transferService");
-
+    @Override
+    public String toString() {
+        return "TransferServlet{" +
+                "transferService=" + transferService +
+                '}';
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
