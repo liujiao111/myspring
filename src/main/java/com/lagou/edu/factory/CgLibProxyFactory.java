@@ -9,6 +9,9 @@ import org.springframework.cglib.proxy.MethodProxy;
 
 import java.lang.reflect.Method;
 
+/**
+ * CGLIB动态代理
+ */
 @Service(value = "cgLibProxyFactory")
 public class CgLibProxyFactory implements MethodInterceptor {
     private Object target;

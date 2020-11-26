@@ -13,6 +13,9 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/**
+ * JDK动态代理
+ */
 @Service(value = "proxyFactory")
 public class ProxyFactory {
 
@@ -25,8 +28,6 @@ public class ProxyFactory {
     }
 
     public Object getProxy(Object target) {
-        //如果对象实现了接口， 则返回JDK动态代理对象
-
         return Proxy.newProxyInstance(this.getClass().getClassLoader(), target.getClass().getInterfaces(), new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
