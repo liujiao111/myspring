@@ -31,13 +31,17 @@ public class IocInterceptor implements Filter {
         try {
             //将带有该注解的类实例化并处理其依赖问题， 将其加入bean工厂中
             //实例化bean
-            newInstance(serviceAnnotations, 1);
             newInstance(repositoryAnnotations, 2);
+            newInstance(serviceAnnotations, 1);
             newInstance(controllerAnnotations, 3);
 
-            //处理bean之间的依赖关系
             HashMap<String, Object> beans = BeanFactory.getBeans();
-            handlerClassDependency(beans);
+
+            //处理bean之间的依赖关系
+            handlerDependency(beans);
+
+            //处理事务(需要处理完对象之间的依赖关系再进行事务处理)
+            handlerTransaction(beans);
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -47,15 +51,41 @@ public class IocInterceptor implements Filter {
     }
 
     /**
-     * 处理对象之间依赖关系
+     * 处理事务
      * @param beans
      */
-    private void handlerClassDependency(HashMap<String, Object> beans) throws IllegalAccessException {
+    private void handlerTransaction(HashMap<String, Object> beans) {
         final Set<String> keySet = beans.keySet(); //key为 bean name，value为类实例
         for (String beanName : keySet) {
             Object bean = beans.get(beanName);
             Class beanClass = bean.getClass();
 
+            //如果该类有@Transactional注解， 表明该类的所有方法都受事务控制
+            Transactional transactionalAnnotation = (Transactional) beanClass.getAnnotation(Transactional.class);
+            if(transactionalAnnotation != null) {
+                final HashMap<String, Object> beans1 = BeanFactory.getBeans();
+
+                //获取该类的代理对象，便于控制事务
+                ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getInstance("proxyFactory");
+
+                Object proxy = proxyFactory.getProxy(bean);
+
+                //将代理对象重新放入IOC容器中
+                BeanFactory.addInstance(beanName, proxy);
+            } else {
+                BeanFactory.addInstance(beanName, bean);
+            }
+        }
+    }
+
+    /**
+     * 处理对象依赖关系
+     */
+    private void handlerDependency(HashMap<String, Object> beans) throws IllegalAccessException {
+        final Set<String> keySet = beans.keySet(); //key为 bean name，value为类实例
+        for (String beanName : keySet) {
+            Object bean = beans.get(beanName);
+            Class beanClass = bean.getClass();
             //判断类中属性是否有@Autowired注解，如果有，从IOC容器中找出对应类型的bean并赋值
             Field[] fields = beanClass.getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
@@ -68,24 +98,11 @@ public class IocInterceptor implements Filter {
                     field.set(bean, autowiredBean); //给当前对象赋值
                 }
             }
-
-            //如果该类有@Transactional注解， 表明该类的所有方法都受事务控制
-            Transactional transactionalAnnotation = (Transactional) beanClass.getAnnotation(Transactional.class);
-            if(transactionalAnnotation != null) {
-                //获取该类的代理对象，便于控制事务
-                ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getInstance("proxyFactory");
-
-                Object proxy = proxyFactory.getProxy(bean);
-                System.out.println("获取代理类对象：" + proxy);
-                BeanFactory.addInstance(beanName, proxy);
-            } else {
-                BeanFactory.addInstance(beanName, bean);
-            }
+            //将处理好依赖关系的对象重新放入IOC容器中
+            BeanFactory.addInstance(beanName, bean);
         }
-
-        ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getInstance("proxyFactory");
-        System.out.println("proxyFactory:" + proxyFactory.getTransactionManager());
     }
+
 
     /**
      * 实例化类对象

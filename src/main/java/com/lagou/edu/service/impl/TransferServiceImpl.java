@@ -11,7 +11,7 @@ import com.lagou.edu.service.TransferService;
 /**
  * @author liujiao
  */
-@Service(value = "")
+@Service(value = "") //value为空，bean name默认为类名首字母小写
 @Transactional
 public class TransferServiceImpl implements TransferService {
 

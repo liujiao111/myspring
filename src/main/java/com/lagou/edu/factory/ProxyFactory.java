@@ -2,6 +2,7 @@ package com.lagou.edu.factory;
 
 
 import com.lagou.edu.annon.Autowired;
+import com.lagou.edu.annon.Repository;
 import com.lagou.edu.annon.Service;
 import com.lagou.edu.utils.TransactionManager;
 
@@ -38,6 +39,7 @@ public class ProxyFactory {
                 } catch (Exception e) {
                     System.out.println("异常：" + e);
                     //事务回滚
+
                     transactionManager.rollback();
                     //异常记得向上抛出
                     throw e;
