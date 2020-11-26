@@ -2,6 +2,7 @@ package com.lagou.edu.servlet;
 
 import com.lagou.edu.annon.Controller;
 import com.lagou.edu.factory.BeanFactory;
+import com.lagou.edu.service.impl.TransferServiceImpl;
 import com.lagou.edu.utils.JsonUtils;
 import com.lagou.edu.pojo.Result;
 import com.lagou.edu.service.TransferService;
@@ -20,8 +21,11 @@ import java.io.IOException;
 @WebServlet(name="transferServlet",urlPatterns = "/transferServlet")
 public class TransferServlet extends HttpServlet {
 
-    private TransferService transferService = (TransferService) BeanFactory.getInstance("transferService");
+    //实现接口的情况下
+    //private TransferService transferService = (TransferService) BeanFactory.getInstance("transferServiceImpl");
 
+    //不实现接口的情况下(测试CGLIB动态代理)
+    private TransferServiceImpl transferService = (TransferServiceImpl) BeanFactory.getInstance("transferServiceImpl");
     @Override
     public String toString() {
         return "TransferServlet{" +

@@ -5,6 +5,9 @@ import com.lagou.edu.annon.Autowired;
 import com.lagou.edu.annon.Repository;
 import com.lagou.edu.annon.Service;
 import com.lagou.edu.utils.TransactionManager;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -22,12 +25,13 @@ public class ProxyFactory {
     }
 
     public Object getProxy(Object target) {
-        //判断该类是否实现了接口，如果实现接口，使用JDK动态代理，否则使用CGLIB代理
+        //如果对象实现了接口， 则返回JDK动态代理对象
+
         return Proxy.newProxyInstance(this.getClass().getClassLoader(), target.getClass().getInterfaces(), new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 Object invoke = null;
-                try{
+                try {
                     //开启事务
                     transactionManager.beginTransaction();
 

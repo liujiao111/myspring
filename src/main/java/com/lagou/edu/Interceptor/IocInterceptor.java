@@ -2,6 +2,7 @@ package com.lagou.edu.Interceptor;
 
 import com.lagou.edu.annon.*;
 import com.lagou.edu.factory.BeanFactory;
+import com.lagou.edu.factory.CgLibProxyFactory;
 import com.lagou.edu.factory.ProxyFactory;
 import org.reflections.Reflections;
 import org.springframework.util.StringUtils;
@@ -63,12 +64,17 @@ public class IocInterceptor implements Filter {
             //如果该类有@Transactional注解， 表明该类的所有方法都受事务控制
             Transactional transactionalAnnotation = (Transactional) beanClass.getAnnotation(Transactional.class);
             if(transactionalAnnotation != null) {
-                final HashMap<String, Object> beans1 = BeanFactory.getBeans();
 
                 //获取该类的代理对象，便于控制事务
-                ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getInstance("proxyFactory");
-
-                Object proxy = proxyFactory.getProxy(bean);
+                Object proxy;
+                //判断该类是否实现了接口，如果实现接口，使用JDK动态代理，否则使用CGLIB代理
+                if(bean.getClass().getInterfaces().length > 0) {
+                    ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getInstance("proxyFactory");
+                    proxy = proxyFactory.getProxy(bean);
+                } else {
+                    CgLibProxyFactory proxyFactory = (CgLibProxyFactory) BeanFactory.getInstance("cgLibProxyFactory");
+                    proxy = proxyFactory.getProxy(bean);
+                }
 
                 //将代理对象重新放入IOC容器中
                 BeanFactory.addInstance(beanName, proxy);

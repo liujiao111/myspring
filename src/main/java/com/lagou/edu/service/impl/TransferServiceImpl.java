@@ -13,13 +13,14 @@ import com.lagou.edu.service.TransferService;
  */
 @Service(value = "") //value为空，bean name默认为类名首字母小写
 @Transactional
-public class TransferServiceImpl implements TransferService {
+public class TransferServiceImpl{ //implements TransferService
+
 
     //改造3
     @Autowired(value = "accountDao")
     private AccountDao accountDao;
 
-    @Override
+    //@Override
     public void transfer(String fromCardNo, String toCardNo, int money) throws Exception {
         Account from = accountDao.queryAccountByCardNo(fromCardNo);
         Account to = accountDao.queryAccountByCardNo(toCardNo);
@@ -28,6 +29,7 @@ public class TransferServiceImpl implements TransferService {
         to.setMoney(to.getMoney() + money);
 
         accountDao.updateAccountByCardNo(to);
+        //制造异常测试事务控制
         int i = 10/0;
         accountDao.updateAccountByCardNo(from);
     }
