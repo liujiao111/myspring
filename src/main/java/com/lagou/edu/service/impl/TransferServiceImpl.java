@@ -13,7 +13,7 @@ import com.lagou.edu.service.TransferService;
  */
 @Service(value = "") //value为空，bean name默认为类名首字母小写
 @Transactional
-public class TransferServiceImpl{ //implements TransferService
+public class TransferServiceImpl {
 
 
     //改造3

@@ -22,7 +22,7 @@ import java.io.IOException;
 public class TransferServlet extends HttpServlet {
 
     //实现接口的情况下
-    //private TransferService transferService = (TransferService) BeanFactory.getInstance("transferServiceImpl");
+    //private TransferService transferService = (TransferService) BeanFactory.getInstance("transferService");
 
     //不实现接口的情况下(测试CGLIB动态代理)
     private TransferServiceImpl transferService = (TransferServiceImpl) BeanFactory.getInstance("transferServiceImpl");
